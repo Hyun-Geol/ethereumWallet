@@ -1,24 +1,29 @@
 let createError = require('http-errors');
 let express = require('express');
 let app = express();
+let path = require('path');
 let logger = require('morgan');
 
-let index = require('./routes/index');
-let signUp = require('./routes/signUp');
-let signUpForPrivateKey = require('./routes/signUpForPrivateKey');
-let send = require('./routes/send');
-let getPrivateKey = require('./routes/getPrivateKey');
+let indexRouter = require('./routes/index');
+let signUpRouter= require('./routes/signUp');
+let signUpForPrivateKeyRouter = require('./routes/signUpForPrivateKey');
+let sendRouter = require('./routes/send');
+let getPrivateKeyRouter = require('./routes/getPrivateKey');
+let errorRouter = require('./routes/error');
 
 app.use('/public', express.static(__dirname + "/public"));
 app.set('view engine', 'ejs');
 
 app.use(logger('dev'));
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 
-app.use('/', index);
-app.use('/signUp', signUp);
-app.use('/signUpForPrivateKey', signUpForPrivateKey);
-app.use('/send', send);
-app.use('/getPrivateKey', getPrivateKey);
+app.use('/', indexRouter);
+app.use('/signUp', signUpRouter);
+app.use('/signUpForPrivateKey', signUpForPrivateKeyRouter);
+app.use('/send', sendRouter);
+app.use('/getPrivateKey', getPrivateKeyRouter);
+app.use('/error', errorRouter);
 
 app.use(function(req, res, next) {
   next(createError(404));

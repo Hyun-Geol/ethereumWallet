@@ -12,7 +12,7 @@
         <label for="">비밀번호</label>
         <input type="password" id='password1' class="form-control" placeholder="PASSWORD">
         <input type="password" id='password2' class="form-control" placeholder="PASSWORD"><br>
-        <button id="signUp" class="btn btn-lg btn-primary btn-block">Sign Up</button>
+        <button type="button" id="signUp" class="btn btn-lg btn-primary btn-block">Sign Up</button>
         <button id="loginPage" class="btn btn-lg btn-primary btn-block">Login Page</button>
     </div>
 
@@ -21,15 +21,15 @@
     <script>
         $('#signUp').click(function () {
             $.ajax({
-                url: 'http://localhost:3000/signup',
-                async: true,
-                dataType: 'json',
                 type: 'POST',
-                data: {
-                    'id': $('#userid').val(),
+                url: 'http://localhost:3000/signUp/process',
+                contentType: "application/json; charset=utf-8",
+                dataType: 'json',
+                data: JSON.stringify({
+                    'userid': $('#userid').val(),
                     'password': $('#password1').val()
-                },
-                success: function (result, body, {status}) {
+                }),
+                success: function (result, body, { status }) {
                     if (status == 200) {
                         alert('이미 존재하는 아이디 입니다.')
                     } else if ($('#password1') != $('#password2')) {
@@ -37,9 +37,16 @@
                     } else if (status == 201) {
                         window.location.href = '/'
                     }
-                } 
-            });
+                },
+                error: (error) => {
+                    console.log(JSON.stringify(error));
+                }
+                // error: function (request, status, error) {
+                //     alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
+                // }
+            })
         })
+
 
         $('#loginPage').click(function () {
             window.location.href = '/'
