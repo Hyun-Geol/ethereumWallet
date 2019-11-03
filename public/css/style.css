@@ -1,0 +1,40 @@
+@font-face {
+    font-family: 'BM';
+    src: url('../fonts/BMDOHYEON.ttf') format('truetype');
+}
+
+* {
+    font-family: 'BM';
+}
+
+body {
+    padding-top: 10%;
+    padding-bottom: 10%;
+
+  }
+  
+  .form-sign {
+    max-width: 330px;
+    padding: 15px;
+    margin: 0 auto;
+  }
+  .form-sign .form-sign-heading {
+    margin-bottom: 10px;
+  }
+  .form-sign .form-control {
+    position: relative;
+    height: auto;
+    -webkit-box-sizing: border-box;
+       -moz-box-sizing: border-box;
+            box-sizing: border-box;
+    padding: 10px;
+    font-size: 16px;
+  }
+  .form-sign .form-control:focus {
+    z-index: 2;
+  }
+  
+  .form-control{
+      font-family: '굴림';
+      font-size: 12px;
+  }

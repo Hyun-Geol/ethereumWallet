@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <% include frame/head %>
+</head>
+
+<body>
+    <div class="form-sign">
+        <label for="">아이디</label>
+        <input type="text" id='userid' class="form-control" placeholder="ID"><br>
+        <label for="">비밀번호</label>
+        <input type="password" id='password1' class="form-control" placeholder="PASSWORD">
+        <input type="password" id='password2' class="form-control" placeholder="PASSWORD"><br>
+        <button id="signUp" class="btn btn-lg btn-primary btn-block">Sign Up</button>
+        <button id="loginPage" class="btn btn-lg btn-primary btn-block">Login Page</button>
+    </div>
+
+    <% include frame/bootstrap %>
+
+    <script>
+        $('#signUp').click(function () {
+            $.ajax({
+                url: 'http://localhost:3000/signup',
+                async: true,
+                dataType: 'json',
+                type: 'POST',
+                data: {
+                    'id': $('#userid').val(),
+                    'password': $('#password1').val()
+                },
+                success: function (result, body, {status}) {
+                    if (status == 200) {
+                        alert('이미 존재하는 아이디 입니다.')
+                    } else if ($('#password1') != $('#password2')) {
+                        alert('비밀번호가 일치하지 않습니다.')
+                    } else if (status == 201) {
+                        window.location.href = '/'
+                    }
+                } 
+            });
+        })
+
+        $('#loginPage').click(function () {
+            window.location.href = '/'
+        })
+    </script>
+
+</body>
+
+</html>
