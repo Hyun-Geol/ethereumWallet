@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <% include frame/head %>
+</head>
+
+<body>
+    <table class="table-dark" align="center" style="border-radius: 5px; width: 550px;">
+        <tr>
+            <td>
+                <h4 style="margin: 20px;"><%= userid %>'s Wallet</h4><br>
+                <lable style="margin: 20px; margin-bottom:0px;">Address</lable>
+                <h6 style="margin: 20px;" id="addr"><%= public_key %></h6> <br>
+                <lable style="margin: 20px;">Balance</lable>
+                <h6 style="margin: 20px;"><%= balance %> Ether </h6><br>
+            </td>
+        </tr>
+        <tr align="center">
+            <td>
+                <button type="button" class="btn btn-secondary" style="width: 161px; height: 38px;"
+                    id="faucet">Faucet</button>
+                <button type="button" class="btn btn-secondary" style="width: 161px; height: 38px;"
+                    id="send">전송</button>
+        </tr>
+        <tr align="center">
+            <td>
+                <button type="button" class="btn btn-secondary" style="width: 161px; height: 38px;"
+                    id="logout">로그아웃</button>
+                <button type="button" class="btn btn-secondary" style="width: 161px; height: 38px;" id="getPK">개인키
+                    가져오기</button>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <br>
+                <div class="form-group" style="margin: 20px;">
+                    <h5><label for="exampleInputEmail1">History</label></h5><br>
+                    <%- TxHashList %>
+                    <ul id="txList">
+
+                    </ul>
+                </div>
+            </td>
+        </tr>
+    </table>
+
+
+
+
+    <% include frame/bootstrap %>
+    <script>
+        $('#send').click(function () {
+            window.location.href = '/send'
+        })
+        $('#getPK').click(function () {
+            window.location.href = '/getPrivateKey'
+        })
+        $('#logout').click(function () {
+            window.location.href = '/logout'
+        })
+
+        function TxList(txHash) {
+            return `<li>${txHash}</li>`
+        }
+        $('#faucet').click(function () {
+            let addr = $('#addr').text()
+            $.ajax({
+                type: 'POST',
+                url: 'https://faucet.metamask.io',
+                contentType: "application/json; charset=utf-8",
+                dataType: 'json',
+                data: addr,
+                success: function (txHash, body, { status }) {
+                    alert('요청성공')
+                    $('#txList').append(TxList(txHash))
+                    $.ajax({
+                        type: 'POST',
+                        url: '/main',
+                        contentType: 'application/rawdata',
+                        data: { txHash }
+                    })
+                },
+                error: function ({ status }) {
+                    if (status === 429) {
+                        alert('충분한 금액을 가지고 있거나 요청이 많습니다. 잠시후에 다시 시도해주세요.')
+                    }
+                    if (status === 500) {
+                        alert('서버 에러')
+                    }
+                }
+            })
+        })
+
+
+    </script>
+</body>
+
+</html>

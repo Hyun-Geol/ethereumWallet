@@ -6,15 +6,19 @@
 </head>
 
 <body>
-    <div class="form-sign">
-        <label for="">아이디</label>
-        <input type="text" id='userid' class="form-control" placeholder="ID"><br>
-        <label for="">비밀번호</label>
-        <input type="password" id='password1' class="form-control" placeholder="PASSWORD">
-        <input type="password" id='password2' class="form-control" placeholder="PASSWORD"><br>
-        <button type="button" id="signUp" class="btn btn-lg btn-primary btn-block">Sign Up</button>
-        <button id="loginPage" class="btn btn-lg btn-primary btn-block">Login Page</button>
-    </div>
+    <table class="table-dark" align="center" style="border-radius: 5px; width:350px; height: 320px;">
+        <th>
+            <div class="form-sign">
+                <label for="">아이디</label>
+                <input type="text" id='userid' class="form-control" placeholder="ID"><br>
+                <label for="">비밀번호</label>
+                <input type="password" id='password1' class="form-control" placeholder="PASSWORD">
+                <input type="password" id='password2' class="form-control" placeholder="PASSWORD"><br>
+                <button type="button" id="signUp" class="btn btn-lg btn-secondary btn-block">Sign Up</button>
+                <button id="loginPage" class="btn btn-lg btn-secondary btn-block">Login Page</button>
+            </div>
+        </th>
+    </table>
 
     <% include frame/bootstrap %>
 
@@ -22,28 +26,27 @@
         $('#signUp').click(function () {
             $.ajax({
                 type: 'POST',
-                url: 'http://localhost:3000/signUp/process',
+                url: '/signUp',
                 contentType: "application/json; charset=utf-8",
                 dataType: 'json',
                 data: JSON.stringify({
                     'userid': $('#userid').val(),
-                    'password': $('#password1').val()
+                    'password1': $('#password1').val(),
+                    'password2': $('#password2').val()
                 }),
                 success: function (result, body, { status }) {
-                    if (status == 200) {
+                    if (status === 201) {
                         alert('이미 존재하는 아이디 입니다.')
-                    } else if ($('#password1') != $('#password2')) {
+                    } else if (status === 202) {
                         alert('비밀번호가 일치하지 않습니다.')
-                    } else if (status == 201) {
+                    } else if (status === 200) {
+                        alert('회원가입이 완료되었습니다.')
                         window.location.href = '/'
                     }
                 },
-                error: (error) => {
-                    console.log(JSON.stringify(error));
+                error: function (request, status, error) {
+                    alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
                 }
-                // error: function (request, status, error) {
-                //     alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
-                // }
             })
         })
 

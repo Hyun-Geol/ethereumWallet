@@ -6,8 +6,55 @@
 </head>
 
 <body>
+    <table class="table-dark" align="center" style="border-radius: 5px; width:350px; height: 320px;">
+        <th>
+            <div class="form-sign">
+                <label for="">To</label>
+                <input type="text" id='toAddr' class="form-control" placeholder="받는 주소"><br>
+                <label for="">Gas Price</label>
+                <input type="text" id='gasPrice' class="form-control" value="21000"><br>
+                <label for="">Value</label>
+                <input type="text" id='value' class="form-control" placeholder="전송량"><br>
+                <button type="button" id="send" class="btn btn-lg btn-secondary btn-block">전송</button>
+                <button id="mainPage" class="btn btn-lg btn-secondary btn-block">취소</button>
+            </div>
+        </th>
+    </table>
+
 
     <% include frame/bootstrap %>
+
+    <script>
+        $('#send').click(function () {
+            $.ajax({
+                type: 'POST',
+                url: '/send',
+                contentType: "application/json; charset=utf-8",
+                dataType: 'json',
+                data: JSON.stringify({
+                    'toAddr': $('#toAddr').val(),
+                    'gasPrice': $('#gasPrice').val(),
+                    'value': $('#value').val()
+                }),
+                success: function (result, body, { status }) {
+                    if (status === 201) {
+                        alert('올바른 주소를 입력해주세요.')
+                    } else if (status === 202) {
+                        alert('잔액이 부족합니다.')
+                    } else if (status === 200) {
+                        alert('전송 성공!')
+                        window.location.href = '/main'
+                    }
+                },
+                error: function (request, status, error) {
+                    alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
+                }
+            })
+        })
+        $('#mainPage').click(function () {
+            window.location.href = "/main"
+        })
+    </script>
 </body>
 
 </html>

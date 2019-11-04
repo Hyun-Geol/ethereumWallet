@@ -1,12 +1,12 @@
 let createError = require('http-errors');
 let express = require('express');
 let app = express();
-let path = require('path');
 let logger = require('morgan');
 
 let indexRouter = require('./routes/index');
 let signUpRouter= require('./routes/signUp');
 let signUpForPrivateKeyRouter = require('./routes/signUpForPrivateKey');
+let mainRouter = require('./routes/main');
 let sendRouter = require('./routes/send');
 let getPrivateKeyRouter = require('./routes/getPrivateKey');
 let errorRouter = require('./routes/error');
@@ -21,6 +21,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use('/', indexRouter);
 app.use('/signUp', signUpRouter);
 app.use('/signUpForPrivateKey', signUpForPrivateKeyRouter);
+app.use('/main', mainRouter);
 app.use('/send', sendRouter);
 app.use('/getPrivateKey', getPrivateKeyRouter);
 app.use('/error', errorRouter);

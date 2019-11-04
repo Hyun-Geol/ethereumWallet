@@ -6,12 +6,56 @@
 </head>
 
 <body>
-    <div class="form-sign">
-        <input type="text" class="form-control" id='id' placeholder="ID">
-        <input type="password" class="form-control" id='password' placeholder="PASSWORD"><br>
-        <button type="submit" class="btn btn-lg btn-primary btn-block" id="signin">로그인</button>
-        <button type="button" class="btn btn-lg btn-primary btn-block" onclick="location.href='/signUp'">회원가입</button>
-    </div>
+    <table class="table-dark" align="center" style="border-radius: 5px; width:350px; height: 320px;">
+        <th>
+            <div class="form-sign">
+                <input type="text" class="form-control" id='userid' placeholder="ID">
+                <input type="password" class="form-control" id='password' placeholder="PASSWORD"><br>
+                <button type="button" class="btn btn-lg btn-secondary btn-block" id="signIn">로그인</button>
+                <button type="button" class="btn btn-lg btn-secondary btn-block" id="signUp">회원가입</button>
+                <button type="button" class="btn btn-lg btn-secondary btn-block" id="signUpFor">개인키로 회원가입</button>
+            </div>
+        </th>
+    </table>
+    <script>
+        $('#signIn').click(function () {
+            $.ajax({
+                type: 'POST',
+                url: '/',
+                contentType: "application/json; charset=utf-8",
+                dataType: 'json',
+                data: JSON.stringify({
+                    'userid': $('#userid').val(),
+                    'password': $('#password').val(),
+                }),
+                success: function (result, body, { status }) {
+                    if (status === 201) {
+                        alert('아이디 또는 비밀번호를 확인해주세요.')
+                    } else if (status === 202) {
+                        alert('회원가입을 해주세요.')
+                    } else if (status === 200) {
+                        window.location.href = '/main'
+                    }
+                },
+                error: function (request, status, error) {
+                    alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
+                }
+            })
+        })
+        $('#signUp').click(function () {
+            window.location.href = '/signUp'
+        })
+        $('#signUpFor').click(function () {
+            window.location.href = '/signUpForPrivateKey'
+        })
+        $('.form-sign').keypress(function (event) {
+            if (event.which == 13) {
+                $('#signIn').click();
+                return false;
+            }
+        })
+
+    </script>
 
     <% include frame/bootstrap %>
 </body>

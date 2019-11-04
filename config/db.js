@@ -1,18 +1,18 @@
-let mysql = require('mysql');
+let mySql = require('mysql');
 
-let db_info = {
+let info = {
     host: 'localhost',
     port: 3306,
     user: 'root',
     password: '111111',
     database: 'wallet'
 }
-let db = mysql.createConnection(db_info);
+let mysql = mySql.createConnection(info);
 
-db.connect(function (err) {
+mysql.connect(function (err) {
     if (err) {
         console.error('DB 연동 실패');
-        console.error(err); 
+        console.error(err);
         throw err;
     } else {
         console.log("DB 연동 성공");
@@ -20,6 +20,6 @@ db.connect(function (err) {
 })
 
 module.exports = {
-        db,
-        db_info
+    mysql,
+    info
 }
