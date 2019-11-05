@@ -38,13 +38,13 @@ $ npm run start
     TransactionHash값은 테이블의 크기를 제한하여 5개만 볼 수 있고 더 많은 해시값을 볼 수 있도록 
     스크롤바를 추가하여 모든 자신의 해시 값을 볼 수 있습니다.
 
-    ![main](./screenshot/main.png)
+    ![main](./screenshot/main.PNG)
 
 5. ##### 전송 페이지
     전송페이지에서는 받는 주소가 없을경우 경고창을 띄어줍니다.<br>
     그리고 만약 자신의 잔액이 부족하면 경고창을 띄어줍니다.
 
-    ![send](./screenshot/send.png)
+    ![send](./screenshot/send.PNG)
 
 6. ##### 프라이빗키 가져오기
     프라이빗키를 보려면 password를 입력하여 bcrypt로 암호화 한 후 db에 저장되어있는 password값을 bcrypt 내장함수로 비교한뒤 리턴 값이 참이면 PrivateKey를 복호화하여 반환 해주도록 하였습니다.
