@@ -6,8 +6,66 @@
 </head>
 
 <body>
+    <table class="table-dark" align="center" style="border-radius: 5px; width:350px; height: 320px;">
+        <th>
+            <div class="form-sign">
+                <h4>개인키가져오기</h4><br>
+                <div class="form-group">
+                    <label for="password">password</label>
+                    <input type="password" class="form-control" id="password" placeholder="PASSWORD">
+                </div>
+                <button type="button" class="btn btn-lg btn-secondary btn-block" id="getPK">개인키 가져오기</button>
+                <button type="button" class="btn btn-lg btn-secondary btn-block" id="mainPage">메인페이지로
+                    이동</button><br>
+                <div class="form-group">
+                    <label>개인키</label><button type="button" id="copy" class="btn btn-secondary"
+                        style="float: right;">COPY</button><br>
+                    <p id="privateKey" style="word-break:break-all;"></p>
+                </div>
+            </div>
+        </th>
+    </table>
 
     <% include frame/bootstrap %>
+
+    <script>
+        $('#mainPage').click(function () {
+            window.location.href = '/main'
+        })
+        $('#copy').click(function () {
+            let privateKey = $('#privateKey').text()
+            copyToClipboard(privateKey)
+            alert('Copied!')
+        })
+
+        $('#getPK').click(function () {
+            $.ajax({
+                type: 'POST',
+                url: '/getPrivateKey',
+                contentType: "application/json; charset=utf-8",
+                dataType: 'json',
+                data: JSON.stringify({
+                    'password': $('#password').val()
+                }),
+                success: function (result, body, { status }) {
+                    if (status === 201) {
+                        alert('비밀번호가 일치하지 않습니다.')
+                    } else if (status === 200) {
+                        $('#privateKey').append(result.privateKey)
+                    }
+                }
+            })
+        })
+
+        function copyToClipboard(val) {
+            var t = document.createElement("textarea");
+            document.body.appendChild(t);
+            t.value = val;
+            t.select();
+            document.execCommand('copy');
+            document.body.removeChild(t);
+        }
+    </script>
 </body>
 
 </html>

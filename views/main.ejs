@@ -9,10 +9,15 @@
     <table class="table-dark" align="center" style="border-radius: 5px; width: 550px;">
         <tr>
             <td>
-                <h4 style="margin: 20px;"><%= userid %>'s Wallet</h4><br>
-                <lable style="margin: 20px; margin-bottom:0px;">Address</lable>
+                <h4 style="margin: 20px; background-color:#212121; padding:10px; border-radius: 5px;"><%= userid %>'s
+                    Wallet</h4><br>
+                <h5>
+                    <lable style="margin: 20px; margin-bottom:0px;">Address</lable>
+                </h5>
                 <h6 style="margin: 20px;" id="addr"><%= public_key %></h6> <br>
-                <lable style="margin: 20px;">Balance</lable>
+                <h5>
+                    <lable style="margin: 20px;">Balance</lable>
+                </h5>
                 <h6 style="margin: 20px;"><%= balance %> Ether </h6><br>
             </td>
         </tr>
@@ -31,15 +36,15 @@
                     가져오기</button>
             </td>
         </tr>
+
         <tr>
             <td>
                 <br>
-                <div class="form-group" style="margin: 20px;">
-                    <h5><label for="exampleInputEmail1">History</label></h5><br>
-                    <%- TxHashList %>
-                    <ul id="txList">
-
-                    </ul>
+                <div class="form-group" style="margin: 20px; margin-bottom: 0px;">
+                    <h5><label for="exampleInputEmail1">History</label></h5>
+                    <table class="table table-hover" id="txList">
+                        <%- TxHashList %>
+                    </table>
                 </div>
             </td>
         </tr>
@@ -60,25 +65,25 @@
             window.location.href = '/logout'
         })
 
+
         function TxList(txHash) {
-            return `<li>${txHash}</li>`
+            return `<tr>
+                        <td><a href = https://ropsten.etherscan.io/tx/${txHash}>${txHash}</a></td>
+                    </tr>`
         }
         $('#faucet').click(function () {
             let addr = $('#addr').text()
             $.ajax({
                 type: 'POST',
                 url: 'https://faucet.metamask.io',
-                contentType: "application/json; charset=utf-8",
-                dataType: 'json',
                 data: addr,
-                success: function (txHash, body, { status }) {
+                success: function (txHash, body) {
                     alert('요청성공')
                     $('#txList').append(TxList(txHash))
                     $.ajax({
                         type: 'POST',
                         url: '/main',
-                        contentType: 'application/rawdata',
-                        data: { txHash }
+                        data: { txHash: JSON.stringify(txHash) }
                     })
                 },
                 error: function ({ status }) {

@@ -30,7 +30,7 @@ router.get('/', function (req, res, next) {
       if (!txInfo.length) {
         TxHashList = '';
       } else if (txInfo.length > 0) {
-        TxHashList = '<table class="table table-hover">';
+        TxHashList = '';
         for (let i = 1; i <= txInfo.length; i++) {
           //http://203.236.220.40:3000/tx/ 개인 서버 열었을때(프로젝트 진행한 검색엔진으로)
           TxHashList += `
@@ -38,7 +38,6 @@ router.get('/', function (req, res, next) {
                         <td><a href = https://ropsten.etherscan.io/tx/${txInfo[txInfo.length - i].txHash} target="_blank">${txInfo[txInfo.length - i].txHash}</a></td>
                     </tr>`
         }
-        TxHashList += '</table>'
       }
       return res.render('main', { title: 'EthereumWallet', userid, public_key, balance, TxHashList });
     });
@@ -46,6 +45,8 @@ router.get('/', function (req, res, next) {
 });
 
 router.post('/', function (req, res, next) {
+  let { txHash } = req.body
+  data = txHash.toString().substring(1, 67)
   return res.json({})
 })
 
