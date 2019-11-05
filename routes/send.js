@@ -32,16 +32,27 @@ router.post('/', function (req, res, next) {
     var nonce = await web3.eth.getTransactionCount(req.session.public_key, "pending")
     let decrypted = CryptoJS.AES.decrypt(req.session.private_key, req.session.password)
     decrypted = decrypted.toString(CryptoJS.enc.Utf8).substring(2)
-    let privateKey = new Buffer.from(decrypted, 'hex')
-    web3.eth.getBalance(req.session.public_key.toString(), function (err, wei) {
-      balance = web3.utils.fromWei(wei, 'ether')
-      gas = web3.utils.fromWei(gasPrice, 'Gwei')
-      balance = parseFloat(balance)
-      sendBalance = parseFloat(value) + parseFloat(gas)
+    if (toAddr.length !== 42) {
+      return res.status(201).json({})
+    } else {
+      let ckAddr = web3.utils.checkAddressChecksum(toAddr)
+      if (ckAddr === false) {
+        return res.status(201).json({})
+      }
+    }
+    if (ckAddr === true && toAddr.length === 42) {
+      let privateKey = new Buffer.from(decrypted, 'hex')
+      web3.eth.getBalance(req.session.public_key.toString(), function (err, wei) {
+        balance = web3.utils.fromWei(wei, 'ether')
+        // gas = web3.utils.fromWei(gasPrice, 'Gwei')
+        // balance = parseFloat(balance)
+        // sendBalance = parseFloat(value) + parseFloat(gas)
 
-      if (balance < sendBalance) {
-        return res.status(202).json({})
-      } else if (balance > sendBalance) {
+        //  if (balance < sendBalance) {
+        if (err) {
+          return res.status(201).json({})
+        }
+        //  } else if (balance > sendBalance) {
         const rawTx = {
           nonce: nonce,
           gasLimit: web3.utils.toHex(gasLimit),
@@ -56,7 +67,7 @@ router.post('/', function (req, res, next) {
         let serializedTx = tx.serialize();
         web3.eth.sendSignedTransaction('0x' + serializedTx.toString('hex'), function (err, hash) {
           if (err) {
-            throw err;
+            return res.status(202).json({})
           } else {
             db.mysql.query('SELECT * FROM txhash where userid=?', [req.session.userid], function (err, userInfo) {
               if (err) throw err;
@@ -74,8 +85,9 @@ router.post('/', function (req, res, next) {
             })
           }
         })
-      }
-    })
+        // }
+      })
+    }
   }
   sendTransaction()
 })
