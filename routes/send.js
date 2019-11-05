@@ -35,12 +35,13 @@ router.post('/', function (req, res, next) {
     let privateKey = new Buffer.from(decrypted, 'hex')
     web3.eth.getBalance(req.session.public_key.toString(), function (err, wei) {
       balance = web3.utils.fromWei(wei, 'ether')
+      gas = web3.utils.fromWei(gasPrice, 'Gwei')
       balance = parseFloat(balance)
-      sendeBalance = parseFloat(value)
+      sendBalance = parseFloat(value) + parseFloat(gas)
 
-      if (balance < sendeBalance) {
+      if (balance < sendBalance) {
         return res.status(202).json({})
-      } else if (balance > sendeBalance) {
+      } else if (balance > sendBalance) {
         const rawTx = {
           nonce: nonce,
           gasLimit: web3.utils.toHex(gasLimit),
@@ -59,7 +60,7 @@ router.post('/', function (req, res, next) {
           } else {
             db.mysql.query('SELECT * FROM txhash where userid=?', [req.session.userid], function (err, userInfo) {
               if (err) throw err;
-              if (userInfo[0] === undefined || userInfo !== undefined) {
+              if (userInfo.length) {
                 txHash = new Array();
                 txHash = hash;
                 db.mysql.query('INSERT INTO txHash(userid, txHash) VALUES(?, ?)', [req.session.userid, txHash], function (error, result) {
