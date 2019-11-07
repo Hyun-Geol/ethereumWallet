@@ -19,6 +19,9 @@ router.use(session({
 
 
 router.get('/', function (req, res, next) {
+  if (req.session.is_logined !== true) {
+    res.redirect('/')
+  }
   return res.render('getPrivateKey', { title: '프라이빗키 가져오기' });
 });
 

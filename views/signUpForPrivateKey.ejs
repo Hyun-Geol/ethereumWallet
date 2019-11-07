@@ -11,9 +11,12 @@
             <div class="form-sign">
                 <label for="">아이디</label>
                 <input type="text" id='userid' class="form-control" placeholder="ID"><br>
+                <p id="idMessage" class="hide" style="color:red; font-size: 15px; font-weight:10;"></p>
                 <label for="">비밀번호</label>
                 <input type="password" id='password1' class="form-control" placeholder="PASSWORD">
+                <p id="pwMessage" class="hide" style="color:red; font-size: 15px; font-weight:10;"></p>
                 <input type="password" id='password2' class="form-control" placeholder="PASSWORD"><br>
+                <p id="ckpwMessage" class="hide" style="color:red; font-size: 15px; font-weight:10;"></p><br>
                 <label for="">개인키(0x~ 형태)</label>
                 <input type="text" id='privatekey' class="form-control" placeholder="PRIVATEKEY"><br>
                 <button type="button" id="signUp" class="btn btn-lg btn-secondary btn-block">Sign Up</button>
@@ -25,6 +28,37 @@
     <% include frame/bootstrap %>
 
     <script>
+        $('#userid').change(function () {
+            let idCheck = /^[A-za-z0-9]{5,15}/g;
+            if (!idCheck.test($('#userid').val())) {
+                $('#idMessage').removeClass('hide')
+                $('#idMessage').html("아이디는 영문자, 숫자로 시작하는 5~15자이어야합니다.")
+            } else {
+                $('#idMessage').addClass('hide')
+            }
+        })
+        $('#password1').change(function () {
+            let passwordCheck = /^(?=.*[a-zA-Z])(?=.*[^a-zA-Z0-9])(?=.*[0-9]).{8,16}$/;
+            if (!passwordCheck.test($('#password1').val())) {
+                $('#pwMessage').removeClass('hide')
+                $('#pwMessage').html("암호를 8자이상 16자 이하의 특수문자 조합으로 설정해주세요.")
+            } else {
+                $('#pwMessage').addClass('hide')
+            }
+        })
+        $('#password2').change(function () {
+            if ($('#password1').val() !== $('#password2').val()) {
+                $('#ckpwMessage').removeClass('hide')
+                $('#ckpwMessage').html("암호가 일치하지 않습니다.")
+            } else {
+                $('#ckpwMessage').addClass('hide')
+            }
+        })
+
+        $('#loginPage').click(function () {
+            window.location.href = '/'
+        })
+
         $('#signUp').click(function () {
             $.ajax({
                 type: 'POST',
@@ -39,11 +73,9 @@
                 }),
                 success: function (result, body, { status }) {
                     if (status === 201) {
-                        alert('이미 존재하는 아이디 입니다.')
+                        alert(result.message)
                     } else if (status === 202) {
-                        alert('비밀번호가 일치하지 않습니다.')
-                    } else if (status === 203) {
-                        alert('올바른 키를 입력해주세요.')
+                        alert('이미 존재하는 아이디 입니다.')
                     } else if (status === 200) {
                         alert('회원가입이 완료되었습니다.')
                         window.location.href = '/'
@@ -53,10 +85,6 @@
                     alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
                 }
             })
-        })
-
-        $('#loginPage').click(function () {
-            window.location.href = '/'
         })
     </script>
 </body>
