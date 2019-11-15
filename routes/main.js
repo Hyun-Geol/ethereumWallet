@@ -22,7 +22,7 @@ router.get('/', function (req, res, next) {
     let { userid, public_key } = req.session;
     db.mysql.query(`SELECT * FROM txHash WHERE userid=?`, [userid], async function (err, txInfo) {
       if (err) {
-        console.log("에러다", err)
+        console.error(err)
       }
       await web3.eth.getBalance(public_key.toString(), function (err, wei) {
         balance = web3.utils.fromWei(wei, 'ether')

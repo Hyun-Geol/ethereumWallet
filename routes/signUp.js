@@ -38,15 +38,11 @@ router.post('/', function (req, res, next) {
   } else {
     let newAccount = web3.eth.accounts.create();
     let public_key = newAccount.address;
-
     let password = bcrypt.hashSync(password1)
     let private_key = CryptoJS.AES.encrypt(newAccount.privateKey, password).toString();
-
     let sql = { userid, password, public_key, private_key }
-
     db.mysql.query('INSERT INTO wallet_info set ? ', sql, function (err, result) {
       if (err) {
-        console.log(err)
         return res.status(202).json({message: '이미 존재하는 아이디 입니다.'})
       } else {
         return res.status(200).json({})
