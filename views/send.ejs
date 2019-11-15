@@ -9,12 +9,14 @@
     <table class="table-dark" align="center" style="border-radius: 5px; width:350px; height: 320px;">
         <th>
             <div class="form-sign">
-                <label for="">To</label>
+                <label>To</label>
                 <input type="text" id='toAddr' class="form-control" placeholder="받는 주소"><br>
-                <label for="">Gas Price</label>
+                <label>Gas Price</label>
                 <input type="text" id='gasPrice' class="form-control" value="10"><br>
-                <label for="">Value</label>
+                <label>Value</label>
                 <input type="text" id='value' class="form-control" placeholder="전송량"><br>
+                <label>inputData</label>
+                <input type="text" id='inputData' class="form-control" placeholder="보낼 내용"><br>
                 <button type="button" id="send" class="btn btn-lg btn-secondary btn-block">전송</button>
                 <button id="mainPage" class="btn btn-lg btn-secondary btn-block">취소</button>
             </div>
@@ -34,13 +36,14 @@
                 data: JSON.stringify({
                     'toAddr': $('#toAddr').val(),
                     'gasPrice': $('#gasPrice').val(),
-                    'value': $('#value').val()
+                    'value': $('#value').val(),
+                    'inputData': $('#inputData').val()
                 }),
                 success: function (result, body, { status }) {
                     if (status === 201) {
-                        alert('올바른 주소를 입력해주세요.')
+                        alert(result.message)
                     } else if (status === 202) {
-                        alert('잔액이 부족합니다.')
+                        alert('잔액 혹은 가스비가 부족합니다.')
                     } else if (status === 200) {
                         alert('전송 성공!')
                         window.location.href = '/main'

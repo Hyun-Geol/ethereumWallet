@@ -26,27 +26,33 @@ router.get('/', function (req, res, next) {
 });
 
 router.post('/', async function (req, res) {
-  let { toAddr, gasPrice, value } = req.body;
+  let { toAddr, gasPrice, value, inputData } = req.body;
   let { public_key, userid, private_key, password } = req.session;
 
   if (toAddr.length !== 42) {
-    return res.status(201).json({})
+    return res.status(201).json({ message : "올바른 주소를 입력해주세요." })
   }
   let ckAddr = web3.utils.checkAddressChecksum(toAddr);
   if (ckAddr === false) {
-    return res.status(201).json({})
+    return res.status(201).json({ message : "올바른 주소를 입력해주세요." })
   }
-  let gasLimit = 21000
+  if (!inputData.length){
+    return res.status(201).json({ message : "데이터를 입력해주세요." })
+  }
+  let gasLimit = 100000
   let gWei = 9
+
   let nonce = await web3.eth.getTransactionCount(public_key, "pending")
   let decrypted = CryptoJS.AES.decrypt(private_key, password)
   decrypted = decrypted.toString(CryptoJS.enc.Utf8).substring(2)
+
   let rawTx = {
     nonce: nonce,
     gasLimit: web3.utils.toHex(gasLimit),
     gasPrice: web3.utils.toHex(gasPrice * (10 ** gWei)),
     to: toAddr,
-    value: web3.utils.toHex(web3.utils.toWei(value, 'ether'))
+    value: web3.utils.toHex(web3.utils.toWei(value, 'ether')),
+    data: web3.utils.toHex(inputData)
   }
   
   let tx = new Tx(rawTx, { chain: 'ropsten' });
@@ -58,9 +64,10 @@ router.post('/', async function (req, res) {
     if (err) {
       return res.status(202).json({})
     }
-    db.mysql.query('INSERT INTO txHash(userid, txHash) VALUES(?, ?)', [userid, hash], function (error, result) {
+    let sql = { userid: userid, txHash: hash }
+    db.mysql.query('INSERT INTO txHash set ?', sql, function (error, result) {
       if (error) {
-        return res.status(201).json({})
+        return res.status(201).json({ message : "DB저장 실패" })
       } else {
         return res.status(200).json({})
       }
