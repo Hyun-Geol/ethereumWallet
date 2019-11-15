@@ -9,6 +9,8 @@
     <table class="table-dark" align="center" style="border-radius: 5px; width:350px; height: 320px;">
         <th>
             <div class="form-sign">
+                <label>PASSWORD</label>
+                <input type="password" id='password' class="form-control" placeholder="비밀번호"><br>
                 <label>To</label>
                 <input type="text" id='toAddr' class="form-control" placeholder="받는 주소"><br>
                 <label>Gas Price</label>
@@ -34,6 +36,7 @@
                 contentType: "application/json; charset=utf-8",
                 dataType: 'json',
                 data: JSON.stringify({
+                    'password': $('#password').val(),
                     'toAddr': $('#toAddr').val(),
                     'gasPrice': $('#gasPrice').val(),
                     'value': $('#value').val(),

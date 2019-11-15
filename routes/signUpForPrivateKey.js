@@ -19,8 +19,8 @@ router.use(session({
 
 router.get('/', function (req, res, next) {
   if (req.session.is_logined === true) {
-    res.redirect('/main')
-  }
+    return res.redirect('/main')
+  } 
   return res.render('signUpForPrivateKey', { title: '개인키로 회원가입' });
 });
 
@@ -44,7 +44,7 @@ router.post('/', function (req, res, next) {
       return res.status(201).json({message: "올바른 개인키를 입력해주세요."})
     } else {
       let password = bcrypt.hashSync(password1)
-      let private_key = CryptoJS.AES.encrypt(privatekey, password)
+      let private_key = CryptoJS.AES.encrypt(privatekey, password1)
       let sql = { userid, password, public_key: accounts.address, private_key }
       db.mysql.query('INSERT INTO wallet_info set ? ', sql, function (err, result) {
         if (err) {

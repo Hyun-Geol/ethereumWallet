@@ -16,7 +16,7 @@ router.use(session({
 
 router.get('/', function (req, res, next) {
   if (req.session.is_logined === true) {
-    res.redirect('/main')
+    return res.redirect('/main')
   }
   return res.render('index', { title: '로그인' });
 });

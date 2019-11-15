@@ -17,12 +17,11 @@ router.use(session({
 
 router.get('/', function (req, res, next) {
   if (req.session.is_logined !== true) {
-    res.redirect('/')
+    return res.redirect('/')
   } else {
     let { userid, public_key } = req.session;
     db.mysql.query(`SELECT * FROM txHash WHERE userid=?`, [userid], async function (err, txInfo) {
       if (err) {
-        console.error(err)
       }
       await web3.eth.getBalance(public_key.toString(), function (err, wei) {
         balance = web3.utils.fromWei(wei, 'ether')
