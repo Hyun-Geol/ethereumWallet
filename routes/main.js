@@ -34,7 +34,7 @@ router.get('/', function (req, res, next) {
           //http://203.236.220.40:3000/tx/ 개인 서버 열었을때(프로젝트 진행한 검색엔진으로)
           TxHashList += `
                     <tr>
-                        <td><a href = https://ropsten.etherscan.io/tx/${txInfo[txInfo.length - i].txHash} target="_blank">${txInfo[txInfo.length - i].txHash}</a></td>
+                        <td style="text-overflow:ellipsis; overflow:hidden; white-space:nowrap;"><a href = http://175.125.21.32:3000/tx/${txInfo[txInfo.length - i].txHash} target="_blank">${txInfo[txInfo.length - i].txHash}</a></td>
                     </tr>`
         }
       }
