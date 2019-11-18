@@ -6,25 +6,27 @@
 </head>
 
 <body>
-    <table class="table-dark" align="center" style="border-radius: 5px; width:350px; height: 320px;">
-        <th>
-            <div class="form-sign">
-                <label>PASSWORD</label>
-                <input type="password" id='password' class="form-control" placeholder="비밀번호"><br>
-                <label>To</label>
-                <input type="text" id='toAddr' class="form-control" placeholder="받는 주소"><br>
-                <label>Gas Price</label>
-                <input type="text" id='gasPrice' class="form-control" value="10"><br>
-                <label>Value</label>
-                <input type="text" id='value' class="form-control" placeholder="전송량"><br>
-                <label>inputData</label>
-                <input type="text" id='inputData' class="form-control" placeholder="보낼 내용"><br>
-                <button type="button" id="send" class="btn btn-lg btn-secondary btn-block">전송</button>
-                <button id="mainPage" class="btn btn-lg btn-secondary btn-block">취소</button>
-            </div>
-        </th>
-    </table>
-
+    <nav class="navbar">
+        <table class="table-dark" align="center" style="border-radius: 5px; width:350px; height: 320px;">
+            <th>
+                <div class="form-sign">
+                    <h4>Ether Send</h4>
+                    <label>PASSWORD</label>
+                    <input type="password" id='password' class="form-control" placeholder="비밀번호"><br>
+                    <label>To</label>
+                    <input type="text" id='toAddr' class="form-control" placeholder="받는 주소"><br>
+                    <label>Gas Price</label>
+                    <input type="text" id='gasPrice' class="form-control" value="10"><br>
+                    <label>Value</label>
+                    <input type="text" id='value' class="form-control" placeholder="전송량"><br>
+                    <label>inputData</label>
+                    <input type="text" id='inputData' class="form-control" placeholder="보낼 내용"><br>
+                    <button type="button" id="send" class="btn btn-lg btn-secondary btn-block">전송</button>
+                    <button id="mainPage" class="btn btn-lg btn-secondary btn-block">취소</button>
+                </div>
+            </th>
+        </table>
+    </nav>
 
     <% include frame/bootstrap %>
 

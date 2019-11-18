@@ -6,17 +6,20 @@
 </head>
 
 <body>
-    <table class="table-dark" align="center" style="border-radius: 5px; width:350px; height: 320px;">
-        <th>
-            <div class="form-sign">
-                <input type="text" class="form-control" id='userid' placeholder="ID">
-                <input type="password" class="form-control" id='password' placeholder="PASSWORD"><br>
-                <button type="button" class="btn btn-lg btn-secondary btn-block" id="signIn">로그인</button>
-                <button type="button" class="btn btn-lg btn-secondary btn-block" id="signUp">회원가입</button>
-                <button type="button" class="btn btn-lg btn-secondary btn-block" id="signUpFor">개인키로 회원가입</button>
-            </div>
-        </th>
-    </table>
+    <nav class="navbar">
+        <table class="table-dark" align="center" style="border-radius: 5px; width:350px; height: 320px;">
+            <th>
+                <div class="form-sign">
+                    <h4>LOGIN</h4>
+                    <input type="text" class="form-control" id='userid' placeholder="ID">
+                    <input type="password" class="form-control" id='password' placeholder="PASSWORD"><br>
+                    <button type="button" class="btn btn-lg btn-secondary btn-block" id="signIn">로그인</button>
+                    <button type="button" class="btn btn-lg btn-secondary btn-block" id="signUp">회원가입</button>
+                    <button type="button" class="btn btn-lg btn-secondary btn-block" id="signUpFor">개인키로 회원가입</button>
+                </div>
+            </th>
+        </table>
+    </nav>
     <script>
         $('#signIn').click(function () {
             $.ajax({

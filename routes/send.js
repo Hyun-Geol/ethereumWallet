@@ -28,16 +28,10 @@ router.get('/', function (req, res, next) {
 router.post('/', async function (req, res) {
   let { password, toAddr, gasPrice, value, inputData } = req.body;
   let { public_key, userid, private_key } = req.session;
-
-  if (toAddr.length !== 42) {
+  
+  let ckAddr = await web3.utils.isAddress(toAddr);
+  if (toAddr.length !== 42 || ckAddr === false) {
     return res.status(201).json({ message: "올바른 주소를 입력해주세요." })
-  }
-  let ckAddr = web3.utils.checkAddressChecksum(toAddr);
-  if (ckAddr === false) {
-    return res.status(201).json({ message: "올바른 주소를 입력해주세요." })
-  }
-  if (!inputData.length) {
-    return res.status(201).json({ message: "데이터를 입력해주세요." })
   }
   let sessionPassword = req.session.password;
   bcrypt.compare(password, sessionPassword, async function (err, tf) {
