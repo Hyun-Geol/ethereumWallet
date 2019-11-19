@@ -45,6 +45,7 @@
                     'inputData': $('#inputData').val()
                 }),
                 success: function (result, body, { status }) {
+                    alert('전송 중입니다.')
                     if (status === 201) {
                         alert(result.message)
                     } else if (status === 202) {

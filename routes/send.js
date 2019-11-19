@@ -68,11 +68,10 @@ router.post('/', async function (req, res) {
         db.mysql.query('INSERT INTO txHash set ?', sql, function (error, result) {
           if (error) {
             return res.status(201).json({ message: "DB저장 실패" })
-          } else {
-            return res.status(200).json({})
           }
         })
       })
+      return res.status(200).json({})
     }
   })
 })
