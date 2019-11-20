@@ -1,22 +1,12 @@
 let express = require('express');
 let router = express.Router();
 let db = require('../config/db')
-let session = require('express-session');
-let MySQLStore = require('express-mysql-session')(session)
 let Web3 = require('web3');
 let server = require('../config/web3server');
 let bcrypt = require('bcrypt-nodejs');
 let CryptoJS = require('crypto-js');
 let Tx = require('ethereumjs-tx').Transaction;
 let web3 = new Web3(new Web3.providers.HttpProvider(server.ropsten));
-
-router.use(session({
-  key: 'Wallet',
-  secret: 'sid',
-  resave: false,
-  saveUninitialized: true,
-  store: new MySQLStore(db.info)
-}))
 
 router.get('/', function (req, res, next) {
   if (req.session.is_logined !== true) {

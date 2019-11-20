@@ -2,6 +2,9 @@ let createError = require('http-errors');
 let express = require('express');
 let app = express();
 let logger = require('morgan');
+let db = require('./config/db');
+let session = require('express-session');
+let MySQLStore = require('express-mysql-session')(session);
 
 let indexRouter = require('./routes/index');
 let signUpRouter= require('./routes/signUp');
@@ -17,6 +20,14 @@ app.set('view engine', 'ejs');
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(session({
+  key: 'Wallet',
+  secret: 'sid',
+  resave: false,
+  saveUninitialized: true,
+  store: new MySQLStore(db.info)
+}))
+
 
 app.use('/', indexRouter);
 app.use('/signUp', signUpRouter);

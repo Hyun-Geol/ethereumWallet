@@ -51,7 +51,8 @@
             if ($('#password1').val() !== $('#password2').val()) {
                 $('#ckpwMessage').removeClass('hide')
                 $('#ckpwMessage').html("암호가 일치하지 않습니다.")
-            } else {
+            }
+            if($('#password1').val() === $('#password2').val()) {
                 $('#ckpwMessage').addClass('hide')
             }
         })
