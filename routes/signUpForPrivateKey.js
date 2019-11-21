@@ -5,12 +5,11 @@ let bcrypt = require('bcrypt-nodejs');
 let CryptoJS = require('crypto-js');
 let Web3 = require('web3');
 let server = require('../config/web3server');
-let web3 = new Web3(new Web3.providers.HttpProvider(server.ropsten));
 
 router.get('/', function (req, res, next) {
   if (req.session.is_logined === true) {
     return res.redirect('/main')
-  } 
+  }
   return res.render('signUpForPrivateKey', { title: '개인키로 회원가입' });
 });
 
@@ -28,10 +27,14 @@ router.post('/', function (req, res, next) {
   } else if (privatekey.length !== 66) {
     return res.status(201).json({ message: "올바른 개인키를 입력해주세요." })
   } else {
+    web3 = new Web3(new Web3.providers.HttpProvider(server.ropsten));
+    if (req.session.web3) {
+      web3 = new Web3(new Web3.prviders.HttpProvieder(req.session.web3))
+    }
     let accounts = web3.eth.accounts.privateKeyToAccount(privatekey)
-    let addrtf = web3.utils.checkAddressChecksum(accounts.address)
+    let addrtf = web3.utils.isAddress(accounts.address)
     if (addrtf === false) {
-      return res.status(201).json({message: "올바른 개인키를 입력해주세요."})
+      return res.status(201).json({ message: "올바른 개인키를 입력해주세요." })
     } else {
       let password = bcrypt.hashSync(password1)
       let private_key = CryptoJS.AES.encrypt(privatekey, password1)

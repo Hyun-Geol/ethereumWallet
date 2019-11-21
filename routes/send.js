@@ -6,7 +6,6 @@ let server = require('../config/web3server');
 let bcrypt = require('bcrypt-nodejs');
 let CryptoJS = require('crypto-js');
 let Tx = require('ethereumjs-tx').Transaction;
-let web3 = new Web3(new Web3.providers.HttpProvider(server.ropsten));
 
 router.get('/', function (req, res, next) {
   if (req.session.is_logined !== true) {
@@ -18,7 +17,10 @@ router.get('/', function (req, res, next) {
 router.post('/', async function (req, res) {
   let { password, toAddr, gasPrice, value, inputData } = req.body;
   let { public_key, userid, private_key } = req.session;
-  
+  web3 = new Web3(new Web3.providers.HttpProvider(server.ropsten));
+  if(req.session.web3) {
+    web3 = new Web3(new Web3.providers.HttpProvider(req.session.web3))
+  }
   let ckAddr = await web3.utils.isAddress(toAddr);
   if (toAddr.length !== 42 || ckAddr === false) {
     return res.status(201).json({ message: "올바른 주소를 입력해주세요." })

@@ -7,55 +7,75 @@
 
 <body>
     <nav class="navbar">
-    <table class="table-dark" align="center" style="border-radius: 5px; width: 90%;">
-        <tr>
-            <td>
-                <h4 style="margin: 20px;"><%= userid %>'s
-                    Wallet</h4><br>
-                <h5>
-                    <lable style="margin: 20px; margin-bottom:0px; margin-right:0px;">Address</lable>
-                    <button type="button" id="copy" class="btn btn-secondary"
-                        style="float: right; margin-right: 20px;">COPY</button>
-                </h5>
-                <h6 style="margin: 20px; word-break:break-all;" id="addr"><%= public_key %></h6> <br>
-                <h5>
-                    <lable style="margin: 20px;">Balance</lable>
-                </h5>
-                <h6 style="margin: 20px;"><%= balance %> Ether </h6><br>
-            </td>
-        </tr>
-        <tr align="center">
-            <td>
-                <button type="button" class="btn btn-secondary" style="width: 161px; height: 38px;"
-                    id="faucet">Faucet</button>
-                <button type="button" class="btn btn-secondary" style="width: 161px; height: 38px;"
-                    id="send">전송</button>
-        </tr>
-        <tr align="center">
-            <td>
-                <button type="button" class="btn btn-secondary" style="width: 161px; height: 38px;"
-                    id="logout">로그아웃</button>
-                <button type="button" class="btn btn-secondary" style="width: 161px; height: 38px;" id="getPK">개인키
-                    가져오기</button>
-            </td>
-        </tr>
+        <table class="table-dark" align="center" style="border-radius: 5px; width: 90%;">
+            <tr>
+                <td>
+                    <h4 style="margin: 20px;"><%= userid %>'s
+                        Wallet
+                    </h4>
+                    <div class="btn-group" style="float: right; margin-right:20px;">
+                        <button type="button" id="Server" class="btn btn-info dropdown-toggle" data-toggle="dropdown"
+                            aria-expanded="false">
+                            <%- network -%> <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" role="menu" style="border: 0; background:none;">
+                            <li><button class="btn btn-info" onClick="web3server(this.id)" style="width: 103.73px; margin-bottom: 1px;"
+                                    id="MainNet">MainNet</button></li>
+                            <li><button class="btn btn-info" onClick="web3server(this.id)" style="width: 103.73px; margin-bottom: 1px;"
+                                    id="Ropsten">Ropsten</button></li>
+                            <li><button class="btn btn-info" onClick="web3server(this.id)" style="width: 103.73px; margin-bottom: 1px;"
+                                    id="Rinkeby">Rinkeby</button></li>
+                            <li><button class="btn btn-info" onClick="web3server(this.id)" style="width: 103.73px; margin-bottom: 1px;"
+                                    id="Kovan">Kovan</button></li>
+                            <li><button class="btn btn-info" onClick="web3server(this.id)" style="width: 103.73px; margin-bottom: 1px;"
+                                    id="Goerli">Goerli</button></li>
+                        </ul>
+                    </div><br><br>
+                    <h5>
+                        <lable style="margin: 20px; margin-bottom:0px; margin-right:0px;">Address</lable>
+                        <button type="button" id="copy" class="btn btn-secondary"
+                            style="float: right; margin-right: 20px;">COPY</button>
+                    </h5>
+                    <h6 style="margin: 20px; word-break:break-all;" id="addr"><%= public_key %></h6> <br>
+                    <h5>
+                        <lable style="margin: 20px;">Balance</lable>
+                    </h5>
+                    <h6 style="margin: 20px;"><%= balance %> Ether </h6><br>
+                </td>
+            </tr>
+            <tr align="center">
+                <td>
+                    <button type="button" class="btn btn-secondary" style="width: 161px; height: 38px;"
+                        id="faucet">Faucet</button>
+                    <button type="button" class="btn btn-secondary" style="width: 161px; height: 38px;"
+                        id="send">전송</button>
+            </tr>
+            <tr align="center">
+                <td>
+                    <button type="button" class="btn btn-secondary" style="width: 161px; height: 38px;"
+                        id="logout">로그아웃</button>
+                    <button type="button" class="btn btn-secondary" style="width: 161px; height: 38px;" id="getPK">개인키
+                        가져오기</button>
+                </td>
+            </tr>
 
-        <tr>
-            <td>
-                <br>
-                <div class="table-wrapper-scroll-y" style="margin: 20px; margin-bottom: 0px;">
-                    <h5><label for="exampleInputEmail1">History</label></h5>
-                    <div style="width: 100%; height:250px; overflow-y:auto; overflow-x: hidden; margin-bottom: 20px;">
-                        <table class="table table-hover" id="txList" style="table-layout: fixed;">
-                            <tbody>
-                                <%- TxHashList %>
-                            </tbody>
-                        </table>
+            <tr>
+                <td>
+                    <br>
+                    <div class="table-wrapper-scroll-y" style="margin: 20px; margin-bottom: 0px;">
+                        <h5><label for="exampleInputEmail1">History</label></h5>
+                        <div
+                            style="width: 100%; height:250px; overflow-y:auto; overflow-x: hidden; margin-bottom: 20px;">
+                            <table class="table table-hover" id="txList" style="table-layout: fixed;">
+                                <tbody>
+                                    <%- TxHashList %>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                </div>
-            </td>
-        </tr>
-    </table>
+                </td>
+            </tr>
+        </table>
     </nav>
 
 
@@ -116,6 +136,33 @@
             t.select();
             document.execCommand('copy');
             document.body.removeChild(t);
+        }
+
+        function web3server(network) {
+            const passData = {
+                network: network,
+            }
+            $.ajax({
+                type: 'POST',
+                url: '/main/changeNetwork',
+                contentType: "application/json; charset=utf-8",
+                dataType: 'JSON',
+                data: JSON.stringify(passData),
+                success: function (result, body, { status }) {
+                    //$('.block').addClass('hide')
+                    // $('.changeBlock').removeClass('hide')
+                    // $('')
+                    // $('#block').html(result)
+                    location.reload()
+
+                },
+                error: function (request, status, error) {
+                    alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
+                },
+                complete: function () {
+
+                }
+            })
         }
 
 

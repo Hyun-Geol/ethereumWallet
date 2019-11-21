@@ -5,7 +5,6 @@ let CryptoJS = require('crypto-js');
 let db = require('../config/db')
 let Web3 = require('web3');
 let server = require('../config/web3server');
-let web3 = new Web3(new Web3.providers.HttpProvider(server.ropsten));
 
 router.get('/', function (req, res, next) {
   if (req.session.is_logined === true) {
@@ -26,6 +25,10 @@ router.post('/', function (req, res, next) {
   } else if (password1 !== password2) {
     return res.status(201).json({ message: "비밀번호가 일치하지 않습니다." })
   } else {
+    web3 = new Web3(new Web3.providers.HttpProvider(server.ropsten));
+    if (req.session.web3) {
+      web3 = new Web3(new Web3.prviders.HttpProvieder(req.session.web3))
+    }
     let newAccount = web3.eth.accounts.create();
     let public_key = newAccount.address;
     let password = bcrypt.hashSync(password1)
