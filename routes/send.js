@@ -51,7 +51,7 @@ router.post('/', async function (req, res) {
         data: web3.utils.toHex(inputData)
       }
 
-      let tx = new Tx(rawTx, { chain: 'ropsten' });
+      let tx = new Tx(rawTx, { chain: network.toLowerCase() });
       let privateKey = Buffer.from(decrypted, 'hex')
       tx.sign(privateKey)
       let serializedTx = tx.serialize();
