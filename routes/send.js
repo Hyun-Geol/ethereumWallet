@@ -21,6 +21,10 @@ router.post('/', async function (req, res) {
   if(req.session.web3) {
     web3 = new Web3(new Web3.providers.HttpProvider(req.session.web3))
   }
+  network = 'Ropsten'
+  if(req.session.network) {
+    network = req.session.network
+  }
   let ckAddr = await web3.utils.isAddress(toAddr);
   if (toAddr.length !== 42 || ckAddr === false) {
     return res.status(201).json({ message: "올바른 주소를 입력해주세요." })
@@ -56,7 +60,7 @@ router.post('/', async function (req, res) {
         if (err) {
           return res.status(202).json({})
         }
-        let sql = { userid: userid, network: req.session.network, txHash: hash }
+        let sql = { userid: userid, network: network, txHash: hash }
         db.mysql.query('INSERT INTO txHash set ?', sql, function (error, result) {
           if (error) {
             return res.status(201).json({ message: "DB저장 실패" })
