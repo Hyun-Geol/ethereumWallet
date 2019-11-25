@@ -14,6 +14,7 @@ CREATE TABLE `wallet_info` (
 CREATE TABLE `txHash` (
   `num` int(11) NOT NULL AUTO_INCREMENT,
   `userid` varchar(100) NOT NULL,
+  `network` varchar(100) NOT NULL,
   `txHash` varchar(100) NOT NULL,
   PRIMARY KEY (`num`)
 );

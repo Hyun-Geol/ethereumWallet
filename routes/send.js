@@ -56,7 +56,7 @@ router.post('/', async function (req, res) {
         if (err) {
           return res.status(202).json({})
         }
-        let sql = { userid: userid, txHash: hash }
+        let sql = { userid: userid, network: req.session.network, txHash: hash }
         db.mysql.query('INSERT INTO txHash set ?', sql, function (error, result) {
           if (error) {
             return res.status(201).json({ message: "DB저장 실패" })

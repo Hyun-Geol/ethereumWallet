@@ -17,7 +17,7 @@ router.get('/', function (req, res, next) {
       g_network = req.session.network
     }
     let { userid, public_key } = req.session;
-    db.mysql.query(`SELECT * FROM txHash WHERE userid=?`, [userid], async function (err, txInfo) {
+    db.mysql.query(`SELECT * FROM txHash WHERE userid=? AND network=?`, [userid, g_network], async function (err, txInfo) {
       if (err) {
       }
       await web3.eth.getBalance(public_key.toString(), function (err, wei) {

@@ -46,7 +46,7 @@
             <tr align="center">
                 <td>
                     <button type="button" class="btn btn-secondary" style="width: 161px; height: 38px;"
-                        id="faucet">Faucet</button>
+                        id="faucet">Faucet(Ropsten)</button>
                     <button type="button" class="btn btn-secondary" style="width: 161px; height: 38px;"
                         id="send">전송</button>
             </tr>
@@ -82,6 +82,8 @@
 
     <% include frame/bootstrap %>
     <script>
+
+
         $('#send').click(function () {
             window.location.href = '/send'
         })
@@ -154,13 +156,15 @@
                     // $('')
                     // $('#block').html(result)
                     location.reload()
-
                 },
                 error: function (request, status, error) {
                     alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
                 },
                 complete: function () {
-
+                    if(network !== 'Ropsten') {
+                        $('#faucet').attr('disabled', true)
+                        $('#faucet').html('Ropsten만 가능')
+                    }
                 }
             })
         }
